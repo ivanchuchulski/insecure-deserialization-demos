@@ -7,15 +7,19 @@ import java.io.InputStream;
 import java.io.InvalidClassException;
 import java.io.ObjectInputStream;
 import java.io.ObjectStreamClass;
+import java.util.List;
 
 public class SafeVirusInputStream extends ObjectInputStream {
+    private final List<String> supportedClasses = List.of(Virus.class.getName(), "java.time.Ser");
+
     public SafeVirusInputStream(InputStream in) throws IOException {
         super(in);
     }
 
     @Override
     protected Class<?> resolveClass(ObjectStreamClass input) throws IOException, ClassNotFoundException {
-        if (!input.getName().equals(Virus.class.getName())) {
+//        if (!input.getName().equals(Virus.class.getName())) {
+        if (!supportedClasses.contains(input.getName())) {
             throw new InvalidClassException("unsupported class", input.getName());
         }
 

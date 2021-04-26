@@ -12,4 +12,4 @@ class User(yaml.YAMLObject):
         return "name : {}, surname: {}".format(self.name, self.surname)
 
     def __reduce__(self):
-            return (builtins.exec, ("with open('text.txt','r') as r: print(r.readlines())",))
+        return (builtins.exec, ("with open('text.txt','r') as r: print(r.readlines())",))
