@@ -20,10 +20,8 @@ def index():
   safeGeneration = True
   
   if sessionCookie:
-    # deserialize the cookie
     deserializeWithYaml(sessionCookie) if safeDeserialization else deserializeWithPickle(sessionCookie)
   else:
-    # generate and return session cookie to a first time visitor
     generated_cookie = generateSessionWithYaml() if safeGeneration else generateSessionWithPickle()
 
     res.set_cookie('user_session', generated_cookie)
