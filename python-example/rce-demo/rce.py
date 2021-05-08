@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 import pickle
 import base64
 import yaml
@@ -6,25 +7,25 @@ from flask import request
 from flask import render_template
 from flask import make_response
 
-from sess import Sess
+from user_data import UserData
 
 app = Flask(__name__)
 
 @app.route('/')
 def index():
   res = make_response(render_template('index.html', text="welcome to python rce demo"))
-  sessionCookie = request.cookies.get('user_session')
+  sessionCookie = request.cookies.get('user_access')
 
   # variables for demo
-  safeDeserialization = True
-  safeGeneration = True
+  safeDeserialization = False
+  safeGeneration = False
   
   if sessionCookie:
     deserializeWithYaml(sessionCookie) if safeDeserialization else deserializeWithPickle(sessionCookie)
   else:
     generated_cookie = generateSessionWithYaml() if safeGeneration else generateSessionWithPickle()
 
-    res.set_cookie('user_session', generated_cookie)
+    res.set_cookie('user_access', generated_cookie)
 
   return res
 
@@ -38,7 +39,7 @@ def deserializeWithYaml(sessionCookie):
     print('error : session cookie format')
 
 def generateSessionWithYaml():
-    session = Sess('username1', 'none')
+    session = UserData('peter', 'bg' 'none')
     encoded_session = yaml.dump(session).encode('utf-8')
 
     return base64.b64encode(encoded_session)
@@ -49,7 +50,8 @@ def deserializeWithPickle(sessionCookie):
 
 def generateSessionWithPickle():
     session = {}
-    session['user'] = "username1"
+    session['user'] = "peter"
+    session['language'] = "bg"
     session['access'] = "none"
 
     return base64.b64encode(pickle.dumps(session))
