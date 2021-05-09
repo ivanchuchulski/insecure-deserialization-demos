@@ -17,8 +17,8 @@ def index():
   sessionCookie = request.cookies.get('user_access')
 
   # variables for demo
-  safeDeserialization = False
-  safeGeneration = False
+  safeDeserialization = True
+  safeGeneration = True
   
   if sessionCookie:
     deserializeWithYaml(sessionCookie) if safeDeserialization else deserializeWithPickle(sessionCookie)
@@ -39,7 +39,7 @@ def deserializeWithYaml(sessionCookie):
     print('error : session cookie format')
 
 def generateSessionWithYaml():
-    session = UserData('peter', 'bg' 'none')
+    session = UserData('peter', 'bg', 'none')
     encoded_session = yaml.dump(session).encode('utf-8')
 
     return base64.b64encode(encoded_session)

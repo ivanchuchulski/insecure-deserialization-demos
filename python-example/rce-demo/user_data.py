@@ -13,7 +13,3 @@ class UserData(yaml.YAMLObject):
 
     def __str__(self):
         return "user : {}, language: {}, access: {}".format(self.user, self.language, self.access)
-
-    def __reduce__(self):
-        ls_cmd = ('ls -la')
-        return os.system, (ls_cmd,)
