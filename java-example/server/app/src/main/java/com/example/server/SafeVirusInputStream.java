@@ -18,7 +18,6 @@ public class SafeVirusInputStream extends ObjectInputStream {
 
     @Override
     protected Class<?> resolveClass(ObjectStreamClass input) throws IOException, ClassNotFoundException {
-//        if (!input.getName().equals(Virus.class.getName())) {
         if (!supportedClasses.contains(input.getName())) {
             throw new InvalidClassException("unsupported class", input.getName());
         }

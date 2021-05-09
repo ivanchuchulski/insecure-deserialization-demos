@@ -4,11 +4,9 @@ import com.example.lib.Virus;
 
 import java.io.IOException;
 import java.io.InvalidClassException;
-import java.io.ObjectInput;
 import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Arrays;
 
 public class Server {
     private final ServerSocket serverSocket;
@@ -34,21 +32,14 @@ public class Server {
 
     private void startServer() {
         System.out.println("server up...");
-        System.out.println(System.getProperty("java.runtime.version"));
         while (runServer) {
             try (Socket sock = serverSocket.accept();
-//                ObjectInputStream in = new ObjectInputStream(sock.getInputStream());
-                 SafeVirusInputStream safeVirusInputStream = new SafeVirusInputStream(sock.getInputStream())
+                ObjectInputStream in = new ObjectInputStream(sock.getInputStream());
             ) {
-//                 Virus virus = (Virus) in.readObject(); // deserialization
-                Virus virus = (Virus) safeVirusInputStream.readObject();
-
-                System.out.println("received new virus : ");
-                System.out.println(virus.getClass().getName());
-                System.out.println(Virus.class.getName());
-                virus.print();
+                Virus virus = (Virus) in.readObject(); // deserialization happens before casting
+                printReceivedVirusDetails(virus);
             } catch (InvalidClassException invalidClassException) {
-                System.out.println("invalid class except " + invalidClassException.getMessage());
+                System.out.println("invalid class exception " + invalidClassException.getMessage());
             } catch (IOException ioException) {
                 System.out.println("ioexception" + ioException);
             } catch (ClassNotFoundException classNotFoundException) {
@@ -60,5 +51,33 @@ public class Server {
         } catch (IOException ioException) {
             throw new RuntimeException("error closing server", ioException);
         }
+    }
+
+    private void startSafeServer() {
+        System.out.println("server up...");
+        while (runServer) {
+            try (Socket sock = serverSocket.accept();
+                 SafeVirusInputStream safeVirusInputStream = new SafeVirusInputStream(sock.getInputStream())
+            ) {
+                Virus virus = (Virus) safeVirusInputStream.readObject();
+                printReceivedVirusDetails(virus);
+            } catch (InvalidClassException invalidClassException) {
+                System.out.println("invalid class exception " + invalidClassException.getMessage());
+            } catch (IOException ioException) {
+                System.out.println("ioexception" + ioException);
+            } catch (ClassNotFoundException classNotFoundException) {
+                System.out.println("error : sent an unknown object");
+            }
+        }
+        try {
+            serverSocket.close();
+        } catch (IOException ioException) {
+            throw new RuntimeException("error closing server", ioException);
+        }
+    }
+
+    private void printReceivedVirusDetails(Virus virus) {
+        System.out.println("received new virus : ");
+        virus.print();
     }
 }

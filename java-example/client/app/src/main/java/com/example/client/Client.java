@@ -17,35 +17,27 @@ public class Client {
     private final static int PORT = 7777;
 
     public static void main(String[] ars) {
-//        Virus swineInfluenza = new Virus("influenza A virus subtype H1N1",
-//                                         "A/H1N1", LocalDate.parse("1918-04-01"));
+        Virus swineInfluenza = new Virus("influenza A virus subtype H1N1",
+                                        "A/H1N1", LocalDate.parse("1918-04-01"));
 
-//        Virus mers = new Virus("Middle East respiratory syndrome ",
-//                               "MERS", LocalDate.parse("2012-05-01"));
-//
-//        Virus covid = new Virus("Severe acute respiratory syndrome coroNavirus 2",
-//                                "SARS‑CoV‑2", LocalDate.parse("2019-12-30"));
+        Virus mers = new Virus("Middle East respiratory syndrome ",
+                                "MERS", LocalDate.parse("2012-05-01"));
 
-//        Object reallyBadVirus = buildReallyBadVirus();
+        Virus covid = new Virus("Severe acute respiratory syndrome coroNavirus 2",
+                                "SARS‑CoV‑2", LocalDate.parse("2019-12-30"));
 
-//        String test_str = new String("test str");
-//        registerVirus(test_str);
-
-//        try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new  FileOutputStream("virus.bin"))) {
-//            objectOutputStream.writeObject(swineInfluenza);
-//            objectOutputStream.writeObject(mers);
-//            objectOutputStream.writeObject(covid);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-
-//        registerVirus(swineInfluenza);
-//        registerVirus(mers);
-//        registerVirus(covid);
-//        registerVirus(reallyBadVirus);
-
+        Object reallyBadVirus = buildReallyBadVirus();
+        
         System.out.println(System.getProperty("java.runtime.version"));
+        System.out.println("sending viruses to database server");
+
+        registerVirus(swineInfluenza);
+        registerVirus(mers);
+        registerVirus(covid);
+        registerVirus(reallyBadVirus);
         registerVirus(new Virus("test1", "t1", LocalDate.of(2010, 10, 10)));
+        
+        System.out.println("data is send");
     }
 
     private static Object buildReallyBadVirus() {
@@ -72,7 +64,6 @@ public class Client {
              ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream())) {
             out.writeObject(p);
             out.flush();
-            System.out.println("data is send");
         } catch (IOException ioException) {
             throw new RuntimeException("error sending data", ioException);
         }

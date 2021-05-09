@@ -1,14 +1,15 @@
 package com.example.lib;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
 
 public class Virus implements Serializable {
-    private static final long serialVersionID = 1234L;
-
-    private String name;
-    private String abbreviation;
-    private LocalDate outbreakDate;
+    @Serial
+    private static final long serialVersionUID = 1234L;
+    private final String name;
+    private final String abbreviation;
+    private final LocalDate outbreakDate;
 
     public Virus(String name, String abbreviation, LocalDate outbreakDate) {
         this.name = name;
@@ -26,6 +27,6 @@ public class Virus implements Serializable {
     }
 
     public void print() {
-        System.out.println(toString());
+        System.out.println(this);
     }
 }
