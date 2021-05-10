@@ -23,7 +23,8 @@ public class Server {
 
     public static void main(String[] args) {
         final int PORT = 7777;
-        new Server(PORT).startServer();
+//        new Server(PORT).startServer();
+        new Server(PORT).startSafeServer();
     }
 
     public void stop() {

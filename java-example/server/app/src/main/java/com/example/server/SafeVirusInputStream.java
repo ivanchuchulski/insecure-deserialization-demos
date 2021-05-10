@@ -7,10 +7,12 @@ import java.io.InputStream;
 import java.io.InvalidClassException;
 import java.io.ObjectInputStream;
 import java.io.ObjectStreamClass;
+import java.time.LocalDate;
 import java.util.List;
 
 public class SafeVirusInputStream extends ObjectInputStream {
-    private final List<String> supportedClasses = List.of(Virus.class.getName(), "java.time.Ser");
+    private final List<String> supportedClasses =
+            List.of(Virus.class.getName(), LocalDate.class.getName(), "java.time.Ser");
 
     public SafeVirusInputStream(InputStream in) throws IOException {
         super(in);
