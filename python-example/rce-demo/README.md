@@ -1,48 +1,68 @@
 # Python app
 
-Install Python 3 and stuff
+Linux instructions :
+1. Install Python 3 and virtual env
 ```
 apt-get install -yq python3-venv
 ```
 
-Initialize venv for linux
+2. Initialize venv for linux
 ```
 python3 -m venv venv
 . venv/bin/activate
 ```
 
-Initialize venv for windows
-```
-python -m venv venv
-Set-ExecutionPolicy Unrestricted -Scope Process
-venv/bin/activate
-```
-
-Install Flask and PyYAML
+3. Install Flask and PyYAML
 ```
 pip install Flask
 pip install pyyaml
 ```
 
-Run the application for linux
+4. Run the application for linux
 ```
 export FLASK_APP=rce.py 
 flask run
 ```
 
-Run the application for windows
+Windows instructions :
+
+1. Install Python and virtual env?
 ```
-Set-Variable -Name "FLASK_APP" -Value "rce.py"
+pip install python3-venv
+```
+
+2. Set the app name and init venv
+```
+Set-ExecutionPolicy Unrestricted -Scope Process
+
+Set-Variable -Name "FLASK_APP" -Value "rce.py" 
+or 
+$env:FLASK_APP="rce.py"
+
+python -m venv venv
+venv\Scripts\Activate
+```
+
+3. Install Flask and PyYAML
+```
+pip install Flask
+pip install pyyaml
+```
+
+4. Run the application for windows
+```
 flask run
 ```
 
-For reading pickle object
+For reading pickle object and exploiting use payload script and replace cookie value.
 ```
-echo gASVNAAAAAAAAAB9lCiMBHVzZXKUjAVwZXRlcpSMCGxhbmd1YWdllIwCYmeUjAZhY2Nlc3OUjARub25llHUu | base64 -d > obj.ser
-./payload obj.ser
+echo <cookie value> | base64 -d > obj.ser
+./read obj.ser
+
+./payload.ser
 ```
 
-For exploit use payload script and replace cookie value. For opening reverse shell use
+For opening reverse shell use this specific command
 ```
 nc -nvlp 7777
 ```

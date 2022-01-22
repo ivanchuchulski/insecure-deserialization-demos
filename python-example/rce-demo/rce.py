@@ -11,21 +11,27 @@ from user_data import UserData
 
 app = Flask(__name__)
 
+if __name__ == "__main__":
+    app.run(debug=True)
+
 @app.route('/')
 def index():
-  res = make_response(render_template('index.html', text="welcome to python rce demo"))
-  sessionCookie = request.cookies.get('user_access')
+  res = make_response(render_template('index.html'))
+  return res
 
-  # variable for demo
-  safeDeserialization = False
+# safe portion
+@app.route('/safe')
+def safe():
+  res = make_response(render_template('safe.html', text="welcome to safe page"))
+  cookiesname = 'user_access'
+  sessionCookie = request.cookies.get(cookiesname)
   
   if sessionCookie:
-    deserialize_safe(sessionCookie) if safeDeserialization else deserialize_unsafe(sessionCookie)
+    deserialize_safe(sessionCookie) 
 
   else:
-    generated_cookie = generate_session_with_yaml() if safeDeserialization else generate_session_with_pickle()
-
-    res.set_cookie('user_access', generated_cookie)
+    generated_cookie = generate_session_with_yaml()
+    res.set_cookie(cookiesname, generated_cookie, path='/safe')
 
   return res
 
@@ -44,6 +50,23 @@ def generate_session_with_yaml():
 
     return base64.b64encode(encoded_session)
 
+# unsafe portion
+@app.route('/unsafe')
+def unsafe():
+    res = make_response(render_template('unsafe.html', text="welcome to unsafe page"))
+    cookiesname = 'access'
+
+    sessionCookie = request.cookies.get(cookiesname)
+
+    if sessionCookie:
+      deserialize_unsafe(sessionCookie)
+
+    else:
+      generated_cookie = generate_session_with_pickle()
+      res.set_cookie(cookiesname, generated_cookie, path='/unsafe')
+
+    return res
+    
 def deserialize_unsafe(sessionCookie):
     session = pickle.loads(base64.b64decode(sessionCookie))
     print("unpickled a cookie : {}".format(session))
