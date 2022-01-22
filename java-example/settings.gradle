@@ -1,0 +1,5 @@
+rootProject.name= 'java-example'
+
+include 'lib'
+include 'server'
+include 'client'
